@@ -66,6 +66,7 @@ paths:
     parameters: []
   /account/register:
     post:
+      deprecated: true
       summary: Register admin account
       operationId: post-auth-register-admin
       responses:
