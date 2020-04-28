@@ -1,0 +1,1004 @@
+openapi: 3.0.0
+info:
+  title: bugrank.io
+  version: '1.0'
+  description: BugRank API Specification
+servers:
+  - url: 'https://bugrank.io/api'
+paths:
+  /auth/login:
+    post:
+      summary: Login
+      operationId: post-auth-login
+      description: Login
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+              required:
+                - email
+                - password
+      tags:
+        - auth
+      responses:
+        '200':
+          description: OK
+    parameters: []
+  /account/register-hacker:
+    post:
+      summary: Register hacker account
+      operationId: post-auth-register-hacker
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - name
+                - username
+                - email
+                - password
+      tags:
+        - account
+    parameters: []
+  /account/register:
+    post:
+      summary: Register admin account
+      operationId: post-auth-register-admin
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - name
+                - username
+                - email
+                - password
+      description: Register admin account (test only)
+      tags:
+        - account
+    parameters: []
+  /account/register-host:
+    post:
+      summary: Register company
+      operationId: post-account-register-host
+      responses:
+        '200':
+          description: OK
+      description: Register host (company) account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                organization_name:
+                  type: string
+                website:
+                  type: string
+                name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - organization_name
+                - website
+                - name
+                - username
+                - email
+                - password
+      tags:
+        - account
+  /account/update-avatar:
+    post:
+      summary: Update avatar (for both host and hacker)
+      tags:
+        - account
+      responses:
+        '200':
+          description: OK
+      operationId: get-account-update-avatar
+      description: update avatar (for both host and hacker)
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: object
+                  description: 'image file to upload (accept png, jpg, jpeg, gif, bmp)'
+              required:
+                - image
+        description: ''
+      security:
+        - Authorization: []
+  '/account/resend-verification-email/{email}':
+    post:
+      summary: Resend verification email
+      tags:
+        - account
+      responses:
+        '200':
+          description: OK
+      operationId: post-account-verification-email
+      description: Resend verification email
+      parameters: []
+      security:
+        - Authorization: []
+    parameters:
+      - schema:
+          type: string
+        name: email
+        in: path
+        required: true
+  /account/forgot-password:
+    post:
+      summary: Forgot password
+      operationId: post-account-forgot-password
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+        description: ''
+      description: Forgot password
+      tags:
+        - account
+  /account/change-password:
+    post:
+      summary: Change password
+      operationId: post-account-change-password
+      responses:
+        '200':
+          description: OK
+      description: Change password
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old_password:
+                  type: string
+                new_password:
+                  type: string
+              required:
+                - old_password
+                - new_password
+      tags:
+        - account
+  /auth/logout:
+    post:
+      summary: Logout
+      operationId: post-auth-logout
+      responses:
+        '200':
+          description: OK
+      description: Logout
+      security:
+        - Authorization: []
+      tags:
+        - auth
+  /account/me:
+    get:
+      summary: Show current login user
+      tags:
+        - account
+      responses:
+        '200':
+          description: OK
+      operationId: get-account-me
+      security:
+        - Authorization: []
+  /account/update_language:
+    post:
+      summary: Update language
+      operationId: post-update_language
+      responses:
+        '200':
+          description: OK
+      description: Update language
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                language:
+                  type: string
+                  default: en
+                  description: '"en" or "vi"'
+                  enum:
+                    - en
+                    - vi
+              required:
+                - language
+      tags:
+        - account
+    parameters: []
+  /host/update-policy:
+    post:
+      summary: Update policy for company
+      operationId: post-host-update-policy
+      responses:
+        '200':
+          description: OK
+      security:
+        - Authorization: []
+      description: Update policy for company
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                policy:
+                  type: string
+              required:
+                - policy
+      tags:
+        - company
+  '/host/get-all-policy/{host_id}':
+    get:
+      summary: Get all policy (todo)
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+      operationId: get-host-get-all-policy
+      security:
+        - Authorization: []
+    parameters:
+      - schema:
+          type: string
+        name: host_id
+        in: path
+        required: true
+  /host/profile:
+    get:
+      summary: Get host profile
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+      operationId: get-host-profile
+      description: Get host profile
+      security:
+        - Authorization: []
+  /host/update-profile:
+    post:
+      summary: Update company profile
+      operationId: post-host-update-profile
+      responses:
+        '200':
+          description: OK
+      description: Update company profile
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                website:
+                  type: string
+                twitter_handle:
+                  type: string
+                description:
+                  type: string
+      tags:
+        - company
+  /host/users:
+    get:
+      summary: Get all users in company
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+      operationId: get-host-users
+      description: Get all users in company
+      security:
+        - Authorization: []
+  '/host/users/remove/{user_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: user_id
+        in: path
+        required: true
+    get:
+      summary: Remove user from company (change to POST)
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+      operationId: get-host-users-remove-user_id
+      description: Remove user from company
+      security:
+        - Authorization: []
+  '/host/users/invite/{username}':
+    parameters:
+      - schema:
+          type: string
+        name: username
+        in: path
+        required: true
+        description: ''
+    get:
+      summary: Invite user to join company (change to POST)
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+      operationId: get-host-users-invite-username
+      security:
+        - Authorization: []
+  '/host/user/uninvite/{username}':
+    parameters:
+      - schema:
+          type: string
+        name: username
+        in: path
+        required: true
+    get:
+      summary: Uninvite user to join company (change to POST)
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+      operationId: get-host-user-uninvite-username
+      security:
+        - Authorization: []
+      description: Uninvite user to join company
+  /hackers/joined-companies:
+    get:
+      summary: Get all join company invitations of hacker (for hacker)
+      tags:
+        - hacker
+        - company
+      responses:
+        '200':
+          description: OK
+      operationId: get-hackers-joined-companies
+      description: Get all join company invitations of hacker (for hacker)
+      security:
+        - Authorization: []
+  /hackers/join_company_invitations:
+    get:
+      summary: Get all join company invitations of hacker (for hacker)
+      tags:
+        - hacker
+        - company
+      responses:
+        '200':
+          description: OK
+      operationId: get-hackers-join_company_invitations
+      description: Get all join company invitations of hacker (for hacker)
+      security:
+        - Authorization: []
+  /host/users/invitations:
+    get:
+      summary: Get all current invitations (for company)
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+      operationId: get-host-users-invitations
+      security:
+        - Authorization: []
+  '/hackers/accept_company_invitation/{host_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: host_id
+        in: path
+        required: true
+    post:
+      summary: Accept company invitation
+      operationId: post-hackers-accept_company_invitation-host_id
+      responses:
+        '200':
+          description: OK
+      description: Accept company invitation
+      security:
+        - Authorization: []
+      tags:
+        - hacker
+  '/hackers/decline_company_invitation/{host_id}':
+    parameters:
+      - schema:
+          type: string
+        name: host_id
+        in: path
+        required: true
+    post:
+      summary: Decline join company invitation
+      operationId: post-hackers-decline_company_invitation-host_id
+      responses:
+        '200':
+          description: OK
+      description: Decline join company invitation
+      security:
+        - Authorization: []
+      tags:
+        - hacker
+  /programs/my-programs:
+    get:
+      summary: 'Get my programs (for both company and hacker) todo: udpate filter'
+      tags:
+        - program
+      operationId: get-programs-my-programs
+      security:
+        - Authorization: []
+      description: Get my programs (for both company and hacker)
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: search
+        - schema:
+            type: string
+            default: NEW
+            enum:
+              - OLD
+              - NEW
+          in: query
+          name: sort
+        - schema:
+            type: string
+            enum:
+              - CIDR
+              - Domain
+              - 'iOS: App Store'
+              - 'iOS: Testflight'
+              - 'iOS: .ipa'
+              - 'Android: Play Store'
+              - 'Windows: Microsoft Store'
+              - Source code
+              - Executable
+              - Hardware/IoT
+              - Other
+          in: query
+          name: filter
+        - schema:
+            type: integer
+            default: 20
+          in: query
+          name: per_page
+        - schema:
+            type: integer
+            default: 1
+          in: query
+          name: page
+      responses:
+        '200':
+          description: OK
+  /programs/new:
+    post:
+      summary: 'Create new program (todo: validate host and program parameter)'
+      operationId: post-programs-new
+      responses:
+        '200':
+          description: OK
+      description: Create new program
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                identifier:
+                  type: string
+                eligible_for_submission:
+                  type: integer
+                  default: 1
+                  enum:
+                    - 0
+                    - 1
+                eligible_for_bounty:
+                  type: integer
+                  default: 0
+                  enum:
+                    - 0
+                    - 1
+                confidentiality_requirement:
+                  type: string
+                integrity_requirement:
+                  type: string
+                max_severity:
+                  type: string
+                instruction:
+                  type: string
+                reference:
+                  type: string
+                availability_requirement:
+                  type: string
+                bounty_low:
+                  type: number
+                bounty_medium:
+                  type: number
+                bounty_high:
+                  type: number
+                bounty_critical:
+                  type: number
+              required:
+                - type
+                - identifier
+                - eligible_for_submission
+                - eligible_for_bounty
+                - reference
+                - bounty_low
+                - bounty_medium
+                - bounty_high
+                - bounty_critical
+      tags:
+        - program
+  /programs/archive:
+    post:
+      summary: Archive program
+      tags:
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: post-programs-archive
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                program_id:
+                  type: integer
+              required:
+                - program_id
+  '/programs/update/{program_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: program_id
+        in: path
+        required: true
+    post:
+      summary: 'Update program (todo: define stricter type for field)'
+      tags:
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: post-programs-update-program_id
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identifier:
+                  type: string
+                confidentiality_requirement:
+                  type: string
+                integrity_requirement:
+                  type: string
+                availability_requirement:
+                  type: string
+                max_severity:
+                  type: string
+                eligible_for_submission:
+                  type: integer
+                  default: 1
+                  enum:
+                    - 0
+                    - 1
+                eligible_for_bounty:
+                  type: integer
+                  default: 0
+                  enum:
+                    - 0
+                    - 1
+                instruction:
+                  type: string
+                reference:
+                  type: string
+                bounty_low:
+                  type: number
+                bounty_medium:
+                  type: number
+                bounty_high:
+                  type: number
+                bounty_critical:
+                  type: number
+      description: Update program
+  '/programs/{id}':
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get program by id
+      tags:
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: get-programs-id
+      description: Get program by id
+      security:
+        - Authorization: []
+  '/programs/{program_id}/assign/{user_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: program_id
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: user_id
+        in: path
+        required: true
+    post:
+      summary: Assign program to user (for company)
+      tags:
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: post-programs-program_id-assign-user_id
+      description: Assign program to user (for company)
+      security:
+        - Authorization: []
+  '/programs/{program_id}/unassign/{user_id}':
+    parameters:
+      - schema:
+          type: string
+        name: program_id
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: user_id
+        in: path
+        required: true
+    post:
+      summary: Unassign program from user (for company)
+      tags:
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: post-programs-program_id-unassign-user_id
+      description: Unassign program from user (for company)
+      security:
+        - Authorization: []
+  '/programs/{program_id}/participants':
+    parameters:
+      - schema:
+          type: integer
+        name: program_id
+        in: path
+        required: true
+    get:
+      summary: Get all program participants
+      tags:
+        - participant
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: get-programs-program_id-participants
+      security:
+        - Authorization: []
+  '/programs/{program_id}/invite/{username}':
+    parameters:
+      - schema:
+          type: integer
+        name: program_id
+        in: path
+        required: true
+        description: program id
+      - schema:
+          type: string
+        name: username
+        in: path
+        required: true
+        description: hacker username
+    post:
+      summary: Invite hacker to program
+      tags:
+        - participant
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: post-programs-program_id-invite-username
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+                  enum:
+                    - TEAM_MEMBER
+                    - HACKER
+              required:
+                - role
+        description: ''
+  '/programs/{program_id}/invitations':
+    parameters:
+      - schema:
+          type: integer
+        name: program_id
+        in: path
+        required: true
+    get:
+      summary: Show all invitations of program (for program admin)
+      tags:
+        - participant
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: get-programs-program_id-invitations
+      security:
+        - Authorization: []
+  '/programs/uninvite/{invitation_id}':
+    parameters:
+      - schema:
+          type: number
+        name: invitation_id
+        in: path
+        required: true
+    get:
+      summary: 'Uninvite an invitation (todo: change to POST)'
+      tags:
+        - participant
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: get-programs-uninvite-invitation_id
+      security:
+        - Authorization: []
+  '/programs/accept/{invitation_id}':
+    parameters:
+      - schema:
+          type: string
+        name: invitation_id
+        in: path
+        required: true
+    get:
+      summary: 'Accept program invitation (todo: change to POST)'
+      tags:
+        - participant
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: get-programs-accept-invitation_id
+      security:
+        - Authorization: []
+  '/programs/decline/{invitation_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: invitation_id
+        in: path
+        required: true
+    get:
+      summary: 'Decline a program invitation (todo: change to POST)'
+      tags:
+        - participant
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: get-programs-decline-invitation_id
+      security:
+        - Authorization: []
+  '/programs/{program_id}/remove_participant/{user_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: program_id
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: user_id
+        in: path
+        required: true
+    get:
+      summary: 'Remove user from participant list (todo: change to POST)'
+      tags:
+        - participant
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: get-programs-program_id-remove_participant-user_id
+      security:
+        - Authorization: []
+  /hackers/profile:
+    get:
+      summary: Get hacker profile
+      tags:
+        - hacker
+      responses:
+        '200':
+          description: OK
+      operationId: get-hackers-profile
+      description: Return current user profile (for hacker)
+      security:
+        - Authorization: []
+  /hackers/update-profile:
+    post:
+      summary: Update hacker profile
+      tags:
+        - hacker
+      responses:
+        '200':
+          description: OK
+      operationId: post-hackers-update-profile
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                website:
+                  type: string
+                location:
+                  type: string
+                description:
+                  type: string
+                hide_report_bounty_option:
+                  type: string
+                  enum:
+                    - HIDE_PRIVATE_REPORT
+                    - HIDE_ANONYMOUS_REPORT
+                    - DONT_HIDE
+                    - HIDE_PRIVATE_ANONYMOUS_REPORT
+  /hackers/program_invitations:
+    get:
+      summary: Get all program invitations (for hacker)
+      tags:
+        - hacker
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: get-hackers-program_invitations
+      security:
+        - Authorization: []
+  '/hackers/leave-program/{program_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: program_id
+        in: path
+        required: true
+    get:
+      summary: 'Leave program (todo: change to POST)'
+      tags:
+        - hacker
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: get-hackers-leave-program-program_id
+      security:
+        - Authorization: []
+  '/hackers/leave-company/{company_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: company_id
+        in: path
+        required: true
+    get:
+      summary: 'Leave company (todo: change to POST)'
+      tags:
+        - hacker
+      responses:
+        '200':
+          description: OK
+      operationId: get-hackers-leave-company-company_id
+      security:
+        - Authorization: []
+  /hackers/top:
+    get:
+      summary: Get top hackers
+      tags:
+        - hacker
+      responses:
+        '200':
+          description: OK
+      operationId: get-hackers-top
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: limit
+          description: ''
+components:
+  schemas: {}
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      description: access token
