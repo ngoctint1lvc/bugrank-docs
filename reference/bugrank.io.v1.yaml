@@ -5,6 +5,8 @@ info:
   description: BugRank API Specification
 servers:
   - url: 'https://bugrank.io/api'
+  - url: 'https://gondar.verichains.tech/api'
+    description: ''
 paths:
   /auth/login:
     post:
