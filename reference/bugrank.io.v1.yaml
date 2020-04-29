@@ -66,7 +66,6 @@ paths:
     parameters: []
   /account/register:
     post:
-      deprecated: true
       summary: Register admin account
       operationId: post-auth-register-admin
       responses:
@@ -94,6 +93,7 @@ paths:
       description: Register admin account (test only)
       tags:
         - account
+      deprecated: true
     parameters: []
   /account/register-host:
     post:
@@ -173,6 +173,7 @@ paths:
         name: email
         in: path
         required: true
+        description: ''
   /account/forgot-password:
     post:
       summary: Forgot password
@@ -305,7 +306,7 @@ paths:
         - Authorization: []
     parameters:
       - schema:
-          type: string
+          type: integer
         name: host_id
         in: path
         required: true
@@ -448,6 +449,20 @@ paths:
       operationId: get-host-users-invitations
       security:
         - Authorization: []
+  /host/top:
+    get:
+      summary: Get top companies
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+      operationId: get-host-top
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: limit
   '/hackers/accept_company_invitation/{host_id}':
     parameters:
       - schema:
@@ -469,7 +484,7 @@ paths:
   '/hackers/decline_company_invitation/{host_id}':
     parameters:
       - schema:
-          type: string
+          type: integer
         name: host_id
         in: path
         required: true
@@ -722,12 +737,12 @@ paths:
   '/programs/{program_id}/unassign/{user_id}':
     parameters:
       - schema:
-          type: string
+          type: integer
         name: program_id
         in: path
         required: true
       - schema:
-          type: string
+          type: integer
         name: user_id
         in: path
         required: true
@@ -820,7 +835,7 @@ paths:
   '/programs/uninvite/{invitation_id}':
     parameters:
       - schema:
-          type: number
+          type: integer
         name: invitation_id
         in: path
         required: true
@@ -838,7 +853,7 @@ paths:
   '/programs/accept/{invitation_id}':
     parameters:
       - schema:
-          type: string
+          type: integer
         name: invitation_id
         in: path
         required: true
