@@ -1213,7 +1213,7 @@ paths:
   '/information/{username}':
     parameters:
       - schema:
-          type: integer
+          type: string
         name: username
         in: path
         required: true
