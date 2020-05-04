@@ -1013,6 +1013,765 @@ paths:
           in: query
           name: limit
           description: ''
+  /admin/staffs:
+    get:
+      summary: Get all staff
+      tags:
+        - admin
+      responses:
+        '200':
+          description: OK
+      operationId: get-all-staff
+      description: get all staff
+    parameters: []
+  /admin/assign-staff:
+    parameters: []
+    post:
+      summary: Assign staff for report
+      operationId: post-admin-assign-staff
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                staff_id:
+                  type: integer
+                report_id:
+                  type: integer
+              required:
+                - staff_id
+                - report_id
+      description: admin assign staff for report
+      tags:
+        - admin
+  /admin/activities:
+    get:
+      summary: Get activities log
+      tags:
+        - admin
+      responses:
+        '200':
+          description: OK
+      operationId: get-admin-activities
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: per_page
+        - schema:
+            type: string
+          in: query
+          name: search
+      description: admin get activities log
+  /admin/analytic:
+    get:
+      summary: Get analytic
+      responses:
+        '200':
+          description: OK
+      operationId: get-admin-analytic
+      description: get analytic
+      tags:
+        - admin
+  '/admin/toggle-verify-company/{company_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: company_id
+        in: path
+        required: true
+    get:
+      summary: Toggle verify company
+      tags:
+        - admin
+      responses:
+        '200':
+          description: OK
+      operationId: get-admin-toggle-verify-company-company_id
+      description: admin toggle verify company
+  /admin/companies:
+    get:
+      summary: Get list company
+      tags:
+        - admin
+      responses:
+        '200':
+          description: OK
+      operationId: get-admin-companies
+      description: admin get list company
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: per_page
+        - schema:
+            type: string
+          in: query
+          name: search
+  '/information/all_policies/{host_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: host_id
+        in: path
+        required: true
+    get:
+      summary: Host get all policies
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+      operationId: get-information-all_policies-host_id
+      description: host get all policies
+  '/information/policy/{host_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: host_id
+        in: path
+        required: true
+    get:
+      summary: Host get current policy
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+      operationId: get-information-policy-host_id
+      description: host get current policy
+  '/host/{host_id}/programs':
+    parameters:
+      - schema:
+          type: integer
+        name: host_id
+        in: path
+        required: true
+    get:
+      summary: Get public programs by host id
+      tags:
+        - program
+      responses:
+        '200':
+          description: OK
+      operationId: get-host-host_id-programs
+      description: get public programs by host id
+  '/information/all_reports/{user_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: user_id
+        in: path
+        required: true
+    post:
+      summary: Get all reports by user id
+      operationId: post-information-all_reports-user_id
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - SUBMITED_REPORT
+                    - ASSIGNED_REPORT
+                    - ALL
+                filter_state:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - OPEN_NEW
+                      - OPEN_TRIAGED
+                      - OPEN_NEED_MORE_INFO
+                      - CLOSED_DUPLICATE
+                      - CLOSED_INFORMATIVE
+                      - CLOSED_RESOLVED
+                      - CLOSED_SPAM
+                      - CLOSED_NOT_APPLICABLE
+                filter_payment_status:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - NONE
+                      - PENDING
+                      - CONFIRMED
+        description: ''
+      description: get all reports by user id
+      tags:
+        - hacker
+  '/information/{username}':
+    parameters:
+      - schema:
+          type: string
+        name: username
+        in: path
+        required: true
+    get:
+      summary: Get profile host/hacker by username
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+      operationId: get-information-username
+      description: get profile host/hacker by username
+  /account/bookmarked_hosts:
+    get:
+      summary: Get list bookmarked companies
+      tags:
+        - hacker
+      responses:
+        '200':
+          description: OK
+      operationId: get-account-bookmarked_hosts
+      description: get list bookmarked companies
+  '/programs/cancel-bookmark/{host_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: host_id
+        in: path
+        required: true
+    post:
+      summary: Cancel bookmark company
+      operationId: post-programs-cancel-bookmark-host_id
+      responses:
+        '200':
+          description: OK
+      description: cancel bookmark company
+      tags:
+        - hacker
+  '/programs/bookmark/{host_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: host_id
+        in: path
+        required: true
+    post:
+      summary: Bookmark company
+      operationId: post-programs-bookmark-host_id
+      responses:
+        '200':
+          description: OK
+      description: bookmark company
+      tags:
+        - hacker
+  '/account/basic-info/{id}':
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get basic info of hacker/host
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+      operationId: get-account-basic-info-id
+      description: get basic info of hacker/host
+  /weaknesses:
+    get:
+      summary: Get list weakness
+      tags:
+        - report
+      responses:
+        '200':
+          description: OK
+      operationId: get-weaknesses
+      description: get list weakness
+  /programs/directory/:
+    get:
+      summary: List all hosts which matching program
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+      operationId: get-programs-directory
+      description: list all hosts which matching program
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: per_page
+        - schema:
+            type: string
+          in: query
+          name: search
+        - schema:
+            type: string
+          in: query
+          name: filter
+        - schema:
+            type: string
+            enum:
+              - DESC_TIME
+              - ASC_TIME
+              - DESC_REPORT_RESOLVED
+              - ASC_REPORT_RESOLVED
+          in: query
+          name: sort
+  '/reports/remove_disclose_request/{report_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: report_id
+        in: path
+        required: true
+    get:
+      summary: Reject disclose request
+      tags:
+        - report
+      responses:
+        '200':
+          description: OK
+      operationId: get-reports-remove_disclose_request-report_id
+      description: reject disclose request
+  '/reports/accept_disclose_request/{report_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: report_id
+        in: path
+        required: true
+    post:
+      summary: Accept disclose request
+      operationId: post-reports-accept_disclose_request-report_id
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+      tags:
+        - report
+  '/reports/get_disclose_requests/{report_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: report_id
+        in: path
+        required: true
+    get:
+      summary: Get all request disclose of report
+      tags:
+        - report
+      responses:
+        '200':
+          description: OK
+      operationId: get-reports-get_disclose_requests-report_id
+      description: get all request disclose of report
+  '/reports/request_disclose/{report_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: report_id
+        in: path
+        required: true
+    post:
+      summary: Request to disclose report
+      operationId: post-reports-request_disclose-report_id
+      responses:
+        '200':
+          description: OK
+      description: request to disclose report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                visibility:
+                  type: string
+                  enum:
+                    - DISCLOSED_FULL
+                    - DISCLOSED_LIMITED
+                message:
+                  type: string
+              required:
+                - visibility
+      tags:
+        - report
+  '/reports/reopen/{id}':
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    post:
+      summary: Reopen report
+      operationId: post-reports-reopen-id
+      responses:
+        '200':
+          description: OK
+      description: reopen report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+      tags:
+        - report
+  '/reports/update/{id}':
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    post:
+      summary: 'Update title, content, summary, severity, weakness'
+      operationId: post-reports-update-id
+      responses:
+        '200':
+          description: OK
+      description: 'update title, content, summary, severity, weakness'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                summary:
+                  type: string
+                severity:
+                  type: string
+                weakness:
+                  type: string
+        description: ''
+      tags:
+        - report
+  '/reports/confirm-bounty/{report_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: report_id
+        in: path
+        required: true
+    post:
+      summary: Hacker confirm bounty
+      operationId: post-reports-confirm-bounty-report_id
+      responses:
+        '200':
+          description: OK
+      description: hacker confirm bounty
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+        description: ''
+      tags:
+        - report
+  '/reports/transfer/{report_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: report_id
+        in: path
+        required: true
+    post:
+      summary: Host mark as transfered
+      operationId: post-reports-transfer-report_id
+      responses:
+        '200':
+          description: OK
+      description: host mark as transfered
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+        description: ''
+      tags:
+        - report
+  '/reports/award/{report_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: report_id
+        in: path
+        required: true
+    post:
+      summary: Host set award for hacker
+      operationId: post-reports-award-report_id
+      responses:
+        '200':
+          description: OK
+      description: host set award for hacker
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                bounty:
+                  type: number
+              required:
+                - bounty
+        description: ''
+      tags:
+        - report
+  '/reports/change_state/{id}':
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    post:
+      summary: Change state report
+      operationId: post-reports-change_state-id
+      responses:
+        '200':
+          description: OK
+      description: change state report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state:
+                  type: string
+                message:
+                  type: string
+              required:
+                - state
+      tags:
+        - report
+  '/reports/close/{id}':
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    post:
+      summary: Close report
+      operationId: post-reports-close-id
+      responses:
+        '200':
+          description: OK
+      description: close report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                state:
+                  type: string
+              required:
+                - state
+      tags:
+        - report
+  '/reports/comment/{id}':
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    post:
+      summary: Comment report
+      operationId: post-reports-comment-id
+      responses:
+        '200':
+          description: OK
+      description: comment report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                to:
+                  type: string
+                  enum:
+                    - ALL
+                    - MEMBER_ONLY
+              required:
+                - message
+      tags:
+        - report
+  '/reports/{report_id}/timeline':
+    parameters:
+      - schema:
+          type: integer
+        name: report_id
+        in: path
+        required: true
+    get:
+      summary: Get timeline of report
+      tags:
+        - report
+      responses:
+        '200':
+          description: OK
+      operationId: get-reports-report_id-timeline
+      description: get timeline of report
+  '/reports/vote/{report_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: report_id
+        in: path
+        required: true
+    get:
+      summary: Vote report
+      responses:
+        '200':
+          description: OK
+      operationId: get-reports-vote-report_id
+      description: vote report
+      tags:
+        - report
+  '/reports/{report_id}/votes':
+    parameters:
+      - schema:
+          type: integer
+        name: report_id
+        in: path
+        required: true
+    get:
+      summary: Get list vote of report
+      tags:
+        - report
+      responses:
+        '200':
+          description: OK
+      operationId: get-reports-report_id-votes
+      description: get list vote of report
+  '/reports/{report_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: report_id
+        in: path
+        required: true
+    get:
+      summary: Get report by id
+      tags:
+        - report
+      responses:
+        '200':
+          description: OK
+      operationId: get-reports-report_id
+      description: get report by id
+  /reports:
+    get:
+      summary: Get all report
+      tags:
+        - report
+      responses:
+        '200':
+          description: OK
+      operationId: get-reports
+      description: get all report
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: per_page
+        - schema:
+            type: integer
+          in: query
+          name: page
+        - schema:
+            type: string
+            enum:
+              - popular
+              - new
+          in: query
+          name: order_by
+        - schema:
+            type: string
+          in: query
+          name: search
+        - schema:
+            type: string
+          in: query
+          name: filter
+  /reports/new:
+    post:
+      summary: Create new report
+      operationId: post-reports-new
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                report_content:
+                  type: string
+                program_id:
+                  type: integer
+                severity:
+                  type: string
+                weakness:
+                  type: string
+                summary:
+                  type: string
+                hide_reporter:
+                  type: boolean
+                is_encrypted:
+                  type: boolean
+              required:
+                - title
+                - report_content
+                - program_id
+                - weakness
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+      description: create new report
+      tags:
+        - report
 components:
   schemas: {}
   securitySchemes:
